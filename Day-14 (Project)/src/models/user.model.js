@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
-const userSchemaModel = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     unique: [true, "Username Already Exist"],
@@ -24,5 +24,5 @@ const userSchemaModel = new mongoose.Schema({
   }
 });
 
-const userModel = mongoose.model("Insta_User", userSchemaModel);
-module.exports = userModel;
+const userModel = mongoose.model("insta_User",userSchema)
+module.exports=userModel
