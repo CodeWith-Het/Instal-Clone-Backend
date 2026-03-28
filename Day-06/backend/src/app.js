@@ -1,8 +1,8 @@
 const express = require("express");
 const userDataModel = require("./models/userData.models");
 const cors = require("cors")
-const app = express();
 const path = require("path") 
+const app = express();
 
 app.use(express.json());
 app.use(cors())
@@ -61,6 +61,7 @@ app.patch("/user/:_id", async (req, res) => {
   });
 });
 
+// frontend and backend ko connect karne ke liye file path
 app.use("*name", (req,res) => {
   res.sendFile(path.join(__dirname,"../public/index.html"));
 })

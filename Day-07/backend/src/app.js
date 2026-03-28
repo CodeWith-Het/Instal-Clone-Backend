@@ -1,10 +1,12 @@
 const express = require("express")
 const  cors = require("cors")
 const menuManageModel = require('./models/menu.model')
+const path = require("path")
 const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static("public"))
 
 app.post("/menu", async (req, res) => {
     const { item_name, price, discount_Price, image } = req.body;
@@ -59,6 +61,10 @@ app.patch("/menu/:_id",async (req, res) => {
     res.status(200).json({
         message:"Menu Item IS updated"
     })
+})
+
+app.use("*name", (req, res) => {
+    res.sendFile(path.join(__dirname,"../public/index.html"));
 })
 
 module.exports=app
