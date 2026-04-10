@@ -1,20 +1,12 @@
-# Cohort Backend
----------------------------------------------------------------------------
-# 🚀 Day 01 – Backend Basics (Server Response & Deployment)
+Day 12 Starting Project Insta Clon
 
-## 📌 What I Learned Today
-On Day 01, I learned the fundamentals of backend development using **Node.js and Express**.  
-The main focus was understanding how a **server responds to a user request** and how to **deploy the server to the cloud using Render**.
+Instagram Clone - Backend
+This is the backend server for an Instagram clone built using Node.js, Express, and MongoDB. The project focuses on a modular architecture to handle authentication, media sharing, and user interactions.
 
-## 1️⃣ Program to Send Server Response to User
 
-### 🔹 Concept
-- A user (client) sends a request using a browser or API tool
-- The server processes the request
-- The server sends a response back to the user
-
-This is the basic **client–server communication model**.
-----------------------------------------------------------------------------
-
-# 🚀 Day 01 – How to understand REST API
-
+🛠️ Tech StackRuntime: Node.jsFramework: Express.jsDatabase: MongoDB (via Mongoose)Authentication: JWT (JSON Web Tokens) & Bcrypt for password hashing⚙️ Setup InstructionsClone the project:Bashgit clone <your-repository-url>
+Install dependencies:Bashnpm install
+Environment Setup:Create a .env file in the root directory and add the following:Code snippetPORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_random_secret_key
+Run the server:For production: npm startFor development (with nodemon): npm run dev
