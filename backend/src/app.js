@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors")
 
 // required routers
 const authRouter =   require("./routers/auth.route")
@@ -11,6 +12,12 @@ const app = express();
 // middlewares fuctions
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(
+    {
+    credentials: true,
+        origin: "http://localhost:5173"
+    }
+))
 
 // using routers
 app.use("/api/auth", authRouter)
