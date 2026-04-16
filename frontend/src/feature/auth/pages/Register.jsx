@@ -1,16 +1,34 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "../styles/form.scss"
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/form.scss";
+import { useAuth } from "../hooks/useAuth";
 
 const Register = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [username, setUsername] = useState(" ")
-  const [email, setEmail] = useState(" ")
-  const [password, setPassword] = useState(" ")
+  const { handleRegister, loading } = useAuth();
+  const navigate = useNavigate(); // ✅ Added Navigation
 
   async function submitHandle(e) {
     e.preventDefault();
-    
+
+    if (!username || !email || !password) {
+      alert("All fields are required");
+      return;
+    }
+
+    const res = await handleRegister(username, email, password);
+
+    // ✅ Success par redirect karein
+    if (res.success) {
+      navigate("/");
+    }
+    // ❌ Error handle karein
+    else {
+      alert(res.message || "Registration failed");
+    }
   }
 
   return (
@@ -19,39 +37,43 @@ const Register = () => {
         <h2>Register</h2>
 
         <input
-          onInput={(e)=>{setUsername(e.target.value)}}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           type="text"
           name="username"
           placeholder="Username"
-          
+          required
         />
 
         <input
-          onInput={(e)=>{setEmail(e.target.value)}}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           name="email"
           placeholder="Email"
-          
+          required
         />
 
         <input
-          onInput={(e)=>{setPassword(e.target.value)}}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           type="password"
           name="password"
           placeholder="Password"
-
+          required
         />
 
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
       </form>
 
       <p>
-        Already have an Account?
+        Already have an Account?{" "}
         <Link to="/login">
-          <button>login</button>
+          <button type="button">Login</button>
         </Link>
       </p>
-
     </div>
   );
 };

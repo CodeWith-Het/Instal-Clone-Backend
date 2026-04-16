@@ -46,16 +46,18 @@ async function registerControll(req, res) {
       bio,
       profile_image,
     },
+    token: token
+    
   });
 }
 
 async function loginController(req, res) {
   const { username, email, password } = req.body;
 
-  const user = await userModel.findOne({
-    $or: [{ username: username }, { email: email }],
-  });
+  const query = username ? { username } : { email };
 
+  const user = await userModel.findOne(query);
+  
   if (!user) {
     return res.status(401).json({
       message: "user not found",
@@ -88,6 +90,7 @@ async function loginController(req, res) {
       email: user.email,
       password: user.password,
     },
+    token: token,
   });
 }
 

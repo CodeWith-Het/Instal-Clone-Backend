@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 async function identifyUser(req, res, next) {
+  
   const token = req.cookies.token;
 
   if (!token) {
@@ -20,6 +21,8 @@ async function identifyUser(req, res, next) {
   }
 
   req.user = decode;
+
+
   next();
 }
 
