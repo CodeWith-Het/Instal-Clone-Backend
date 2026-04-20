@@ -1,11 +1,14 @@
 import AppRouter from "./AppRouter";
-import './style.scss'
+import './feature/shared/style.scss'
 import { AuthProvider } from "./feature/auth/auth.context";
+import { PostContextProvider } from "./feature/post/post.context";
 
 const App = () => {
   return (
     <AuthProvider>
-      <AppRouter />
+      <PostContextProvider>
+        <AppRouter />
+      </PostContextProvider>
     </AuthProvider>
   );
 };

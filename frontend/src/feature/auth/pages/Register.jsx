@@ -27,7 +27,7 @@ const Register = () => {
     }
     // ❌ Error handle karein
     else {
-      alert(res.message || "Registration failed");
+      alert(res.message || "User Already Exist");
     }
   }
 

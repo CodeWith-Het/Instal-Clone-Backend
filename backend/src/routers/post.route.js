@@ -7,9 +7,30 @@ const postRouter = express.Router();
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-postRouter.post("/createpost",upload.single("imgFile"),identifyUser,postController.postCreateController,);
-postRouter.get("/getpost", identifyUser, postController.getpostController);
-postRouter.get("/getpostdetails/:postId", identifyUser, postController.postDetails,);
+/**
+ * @route post api/post/createpost
+ */
+postRouter.post("/createpost", upload.single("imgFile"), identifyUser, postController.postCreateController)
+
+/**
+ * @route get api/post/getpost
+ */
+postRouter.get("/getpost", identifyUser, postController.getpostController)
+
+/**
+ * @route get api/post/hetpostdetails/:postId
+ */
+postRouter.get("/getpostdetails/:postId", identifyUser, postController.postDetails)
+
+/**
+ * @route post api/post/like/:postId
+ */
 postRouter.post("/like/:postId", identifyUser, postController.likePostController)
+
+/**
+ * get api/post/feed
+ */
+postRouter.get("/feed",identifyUser,postController.getFeedController)
+
 
 module.exports = postRouter;

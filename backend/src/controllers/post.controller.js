@@ -9,7 +9,8 @@ const imagekit = new ImageKit({
 });
 
 async function postCreateController(req, res) {
-  console.log(req.body, req.file);
+  try {
+    console.log(req.body, req.file);
 
   const file = await imagekit.files.upload({
     file: await toFile(req.file.buffer, "file"),
@@ -33,10 +34,19 @@ async function postCreateController(req, res) {
     message: "Post successfully created",
     data: post,
   });
+  }
+
+  catch (error) {
+    res.status(500).json({
+      message: "server error",
+      error:error.message
+    })
+  }
 }
 
 async function getpostController(req, res) {
-  const userId = req.user.id;
+  try {
+    const userId = req.user.id;
 
   const post = await postModel.find({
     user: userId,
@@ -46,6 +56,13 @@ async function getpostController(req, res) {
     message: "posts fetch",
     post,
   });
+  }
+  catch (error) {
+    res.status(500).json({
+      message: "server error",
+      error:error.message
+    })
+  }
 }
 
 async function postDetails(req, res) {
@@ -82,7 +99,8 @@ async function postDetails(req, res) {
 }
 
 async function likePostController(req, res) {
-  const username = req.user.username;
+  try {
+    const username = req.user.username;
   const postId = req.params.postId;
   const userId = req.user.id;
 
@@ -115,17 +133,44 @@ async function likePostController(req, res) {
 
   const creatorPost = post.user.username
 
-
   res.status(201).json({
     message: `You have liked the post with ID ${postId}`,
     creator:creatorPost,
     like: likeData
   });
+  }
+
+  catch (error) {
+    res.status(500).json({
+      message: "server error",
+      error:error.message
+    })
+  }
+}
+
+async function getFeedController(req,res) {
+  try {
+    const feed = await postModel
+      .find({user:req.user.id}) // this using for find particular user image 
+      .populate("user") // find() method se perticular user ka post creation ka data mil jata hai
+
+  res.status(200).json({
+    message: "Post Fetch Successfully",
+    feed
+  })
+  }
+  catch (error) {
+    res.status(500).json({
+      message: "Error fetching feed",
+      error:error.message
+    });
+  }
 }
 
 module.exports = {
   postCreateController,
   getpostController,
   postDetails,
-  likePostController
+  likePostController,
+  getFeedController
 };

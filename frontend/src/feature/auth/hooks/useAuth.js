@@ -4,6 +4,8 @@ import { login,register } from "../services/auth.api.js";
 
 
 export function useAuth() {
+
+  // this line write call to AuthContext
     const context = useContext(AuthContext)
 
     const {user , setUser , loading ,setLoading}=context
@@ -13,6 +15,9 @@ export function useAuth() {
 
         try {
           const response = await login(username, password);
+          if (response.token) {
+            localStorage.setItem("token", response.token);
+          }
           setUser(response.user);
           return response;
         } catch (error) {
@@ -26,6 +31,9 @@ export function useAuth() {
         setLoading(true);
         try {
           const response = await register(username, email, password);
+          if (response.token) {
+            localStorage.setItem("token", response.token);
+          }
           setUser(response.user);
           return response;
         } catch (error) {
