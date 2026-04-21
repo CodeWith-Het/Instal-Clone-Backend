@@ -1,6 +1,6 @@
 import React from "react";
 
-const Post = ({ post }) => {
+const Post = ({ post,user }) => {
   return (  
     <div className="post">
       {/* top section */}

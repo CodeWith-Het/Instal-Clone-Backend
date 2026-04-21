@@ -25,7 +25,7 @@ postRouter.get("/getpostdetails/:postId", identifyUser, postController.postDetai
 /**
  * @route post api/post/like/:postId
  */
-postRouter.post("/like/:postId", identifyUser, postController.likePostController)
+postRouter.post("/like/:postId", identifyUser, postController.toggleLikeController)
 
 /**
  * get api/post/feed

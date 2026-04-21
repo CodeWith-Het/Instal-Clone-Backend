@@ -22,11 +22,14 @@ async function postCreateController(req, res) {
     return res.status(400).json({
       message: "Image file is required",
     });
-  }
+    }
+    
+    const {username} = req.user
 
   const post = await postModel.create({
     caption: req.body.caption,
     imgFile: file.url,
+    username:username,
     user: req.user.id,
   });
 
@@ -98,7 +101,7 @@ async function postDetails(req, res) {
   }
 }
 
-async function likePostController(req, res) {
+async function toggleLikeController(req, res) {
   try {
     const username = req.user.username;
   const postId = req.params.postId;
@@ -114,14 +117,24 @@ async function likePostController(req, res) {
 
   const isAlreadyLiked = await likeModel.findOne({
     post: postId,
+    user:userId,
     username: username
   });
 
   if (isAlreadyLiked) {
-    return res.status(400).json({
-      message: "You have already liked this post",
-      post: postId,
-      username: username,
+    await likeModel.deleteOne({ post: postId, user: userId })
+    
+    const countingLike = await postModel.findByIdAndUpdate(
+      postId,
+      { $inc: { likeCounter: -1 } },
+      { new: true }
+    )
+
+    return res.status(200).json({
+      message: "Post Unliked",
+      username:username,
+      likeCounter: countingLike.likeCounter,
+      isLiked:false
     });
   }
 
@@ -171,6 +184,6 @@ module.exports = {
   postCreateController,
   getpostController,
   postDetails,
-  likePostController,
-  getFeedController
+  toggleLikeController,
+  getFeedController,
 };

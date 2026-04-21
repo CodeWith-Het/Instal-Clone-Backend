@@ -14,7 +14,7 @@ const likeModelSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: [ true, "User ID is required" ]
-    }
+    },
 },
     { timestamps: true }
 )

@@ -15,11 +15,14 @@ export function useAuth() {
 
         try {
           const response = await login(username, password);
+
           if (response.token) {
             localStorage.setItem("token", response.token);
           }
+
           setUser(response.user);
           return response;
+
         } catch (error) {
           return error.response?.data || error.message;
         } finally {
@@ -28,14 +31,18 @@ export function useAuth() {
       };
 
       const handleRegister = async (username, email, password) => {
+
         setLoading(true);
         try {
           const response = await register(username, email, password);
+
           if (response.token) {
             localStorage.setItem("token", response.token);
           }
+
           setUser(response.user);
           return response;
+          
         } catch (error) {
           return error.response?.data || error.message;
         } finally {

@@ -10,10 +10,19 @@ const postModelSchema = new mongoose.Schema(
       type: String,
       required: [true, "imgUrl is required for creating post"],
     },
+    username: {
+      type: mongoose.Schema.Types.String,
+      ref: "user",
+      required: [true, "username is reuired for creating post"],
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: [true, "user id is required for creating post"],
+    },
+    likeCounter: {
+      type: Number,
+      default: 0,
     },
   },
   {
