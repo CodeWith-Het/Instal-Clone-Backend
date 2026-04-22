@@ -102,79 +102,96 @@ async function postDetails(req, res) {
 async function toggleLikeController(req, res) {
   try {
     const username = req.user.username;
-  const postId = req.params.postId;
-  const userId = req.user.id;
+    const postId = req.params.postId;
+    const userId = req.user.id;
 
-  const post = await postModel.findById(postId).populate("user", "username");
+    const post = await postModel.findById(postId).populate("user", "username");
 
-  if (!post) {
-    return res.status(404).json({
-      message: "Post does not exist",
+    if (!post) {
+      return res.status(404).json({
+        message: "Post does not exist",
+      });
+    }
+
+    const isAlreadyLiked = await likeModel.findOne({
+      post: postId,
+      user: userId,
     });
-  }
 
-  const isAlreadyLiked = await likeModel.findOne({
-    post: postId,
-    user:userId,
-    username: username
-  });
+    if (isAlreadyLiked) {
+      // Agar mil gaya toh delete karo (Unlike)
+      await likeModel.findByIdAndDelete(isAlreadyLiked._id);
 
-  if (isAlreadyLiked) {
-    await likeModel.deleteOne({ post: postId, user: userId })
-    
-    const countingLike = await postModel.findByIdAndUpdate(
+      const updatedPost = await postModel.findByIdAndUpdate(
+        postId,
+        { $inc: { likeCounter: -1 } },
+        { new: true },
+      );
+
+      return res.status(200).json({
+        message: "Post Unliked",
+        likeCounter: updatedPost.likeCounter,
+        isLiked: false,
+      });
+    }
+
+    const likeData = await likeModel.create({
+      post: postId,
+      username: username,
+      user: userId,
+    });
+
+    // like
+    const updatedPost = await postModel.findByIdAndUpdate(
       postId,
-      { $inc: { likeCounter: -1 } },
-      { new: true }
-    )
+      { $inc: { likeCounter: 1 } },
+      { new: true },
+    );
 
-    return res.status(200).json({
-      message: "Post Unliked",
-      username:username,
-      likeCounter: countingLike.likeCounter,
-      isLiked:false
+    const creatorPost = post.user.username;
+
+    res.status(201).json({
+      message: `You have liked the post`,
+      creator: creatorPost,
+      like: likeData,
+      likeCounter: updatedPost.likeCounter,
+      isLiked: true,
     });
-  }
-
-  const likeData = await likeModel.create({
-    post: postId,
-    username: username,
-    user: userId,
-  });
-
-  const creatorPost = post.user.username
-
-  res.status(201).json({
-    message: `You have liked the post with ID ${postId}`,
-    creator:creatorPost,
-    like: likeData
-  });
-  }
-
-  catch (error) {
+  } catch (error) {
     res.status(500).json({
       message: "server error",
-      error:error.message
-    })
+      error: error.message,
+    });
   }
 }
 
-async function getFeedController(req,res) {
+async function getFeedController(req, res) {
   try {
-    const feed = await postModel
-      .find({user:req.user.id}) // this using for find particular user image 
-      .populate("user","username profile_image") // find() method se perticular user ka post creation ka data mil jata hai
+    const posts = await postModel
+      .find({})
+      .populate("user", "username profile_image")
       .sort({ createdAt: -1 })
+      .lean();
 
-  res.status(200).json({
-    message: "Post Fetch Successfully",
-    feed
-  })
-  }
-  catch (error) {
+    const userLikes = await likeModel.find({ user: req.user.id });
+
+    const likedPostIds = userLikes.map((like) => like.post.toString());
+
+    const feed = posts.map((post) => {
+      return {
+        ...post,
+        isLiked: likedPostIds.includes(post._id.toString()),
+      };
+    });
+
+    res.status(200).json({
+      message: "Post Fetch Successfully",
+      feed,
+    });
+  } catch (error) {
     res.status(500).json({
       message: "Error fetching feed",
-      error:error.message
+      error: error.message,
     });
   }
 }

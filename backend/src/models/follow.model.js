@@ -8,6 +8,14 @@ const followModelSchema = new mongoose.Schema(
     following: {
       type:String
     },
+    followCount: {
+      type: Number,
+      default:0
+    },
+    unFollowCount: {
+      type: Number,
+      default:0
+    },
     status: {
       type: String,
       default: "pending",

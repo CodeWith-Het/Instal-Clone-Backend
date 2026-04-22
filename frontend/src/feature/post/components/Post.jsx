@@ -1,48 +1,49 @@
 import React from "react";
+import { usePost } from "../hooks/usePost";
 
 const Post = ({ post }) => {
-  
+  const { handleLike } = usePost();
 
+  const onLikeClick = () => {
+    handleLike(post._id);
+  };
+
+  // const defaultProfile = `https://ui-avatars.com/api/?name=${post.user?.username || "User"}&background=random`;
 
   return (
     <div className="post">
-      {/* top section */}
       <div className="username-section">
         <div className="profile-img-wrapper">
-          <img src={post?.user?.profile_image} alt="profile" />
+          <img src={post.user?.profile_image} alt="profile" />
         </div>
-        <p>{post?.user?.username || "Unknown User"}</p>
+        <p>{post.user?.username || "Unknown User"}</p>
       </div>
 
-      {/* middle section */}
       <div className="post-image">
-        <img src={post?.imgFile} alt="post content" />
+        <img src={post.imgFile} alt="post content" />
       </div>
 
-      {/* bottom section */}
       <div className="caption-section">
         <div className="caption-icon">
           <div className="like-comment-share">
-            <i className="ri-heart-3-line" style={{ cursor: "pointer" }}></i>
-            <i className="ri-chat-3-line" style={{ cursor: "pointer" }}></i>
             <i
-              className="ri-share-forward-line"
-              style={{ cursor: "pointer" }}
+              className={post.isLiked ? "ri-heart-3-fill" : "ri-heart-3-line"}
+              onClick={onLikeClick}
             ></i>
+            <i className="ri-chat-3-line"></i>
+            <i className="ri-share-forward-line"></i>
           </div>
 
           <div className="save">
-            <i className="ri-save-fill" style={{ cursor: "pointer" }}></i>
+            <i className="ri-save-fill"></i>
           </div>
         </div>
 
-        {/* Like counter bhi add kar sakte ho ab yahan */}
-        <p style={{ fontWeight: "bold", margin: "5px 0" }}>
-          {post?.likeCounter || 0} likes
-        </p>
+        <p className="likes-count">{post.likeCounter} likes</p>
 
-        <p>
-           {post?.caption}
+        <p className="caption-text">
+          <span>{post.user?.username}</span>
+          {post.caption}
         </p>
       </div>
     </div>

@@ -1,0 +1,125 @@
+.create-post-container {
+  width: 100%;
+  max-width: 470px;
+  margin: 20px auto;
+  background-color: #000;
+  border: 1px solid #262626;
+  border-radius: 8px;
+  color: white;
+  padding: 20px;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif h2 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #262626;
+    padding-bottom: 10px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .upload-box {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      border: 2px dashed #262626;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #121212;
+
+      i {
+        font-size: 50px;
+        color: #888;
+      }
+      p {
+        color: #888;
+        margin-top: 10px;
+      }
+
+      input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+
+    .preview-box {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      background-color: #121212;
+      border-radius: 8px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      button {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+
+    textarea {
+      background-color: #121212;
+      border: 1px solid #262626;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      resize: none;
+      outline: none;
+
+      &:focus {
+        border-color: #555;
+      }
+    }
+
+    button[type="submit"] {
+      background-color: #0095f6;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover:not(:disabled) {
+        background-color: #1877f2;
+      }
+      &:disabled {
+        background-color: #004d8a;
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+    }
+  }
+}
