@@ -2,7 +2,7 @@
   width: 100%;
   height: 60px;
   background-color: #000000; // Dark theme
-  border-bottom: 1px solid #262626; // Niche ek premium line
+  border-bottom: 1px solid #262626; 
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,6 +34,35 @@
 
       &:hover {
         color: #ed4956; // Hover pe pinkish-red
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .top-navbar {
+    padding: 0 15px;
+    height: 55px; 
+
+    .nav-brand a {
+      font-size: 20px; 
+    }
+
+    .nav-actions {
+      gap: 12px;
+
+      .nav-icon {
+        font-size: 24px;
+      }
+
+      .logout-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+        gap: 5px;
+
+        i {
+          font-size: 16px;
+        }
       }
     }
   }

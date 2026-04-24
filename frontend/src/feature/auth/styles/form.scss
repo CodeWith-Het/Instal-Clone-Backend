@@ -126,3 +126,17 @@
     cursor: not-allowed;
   }
 }
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 400px) {
+  .auth-container {
+    h1 {
+      font-size: 2.2rem; // Heading choti ki
+    }
+
+    .auth-form {
+      width: 90%; // Box 320px ki jagah 90% screen lega
+      padding: 30px 20px;
+    }
+  }
+}
