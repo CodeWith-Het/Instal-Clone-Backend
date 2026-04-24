@@ -1,6 +1,7 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { findOne } = require("../models/post.model");
 
 async function registerControll(req, res) {
   const { username, email, password, bio, profile_image } = req.body;
@@ -29,12 +30,16 @@ async function registerControll(req, res) {
     profile_image,
   });
 
-  const token = jwt.sign({
-    id: user._id,
-    username: user.username
-  }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    {
+      id: user._id,
+      username: user.username,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    },
+  );
 
   res.cookie("token", token);
 
@@ -46,18 +51,19 @@ async function registerControll(req, res) {
       bio,
       profile_image,
     },
-    token: token
-    
+    token: token,
   });
 }
 
 async function loginController(req, res) {
   const { username, email, password } = req.body;
 
-  const user = await userModel.findOne({
-    $or:[{username:username},{email:email}]
-  }).select("+password");
-  
+  const user = await userModel
+    .findOne({
+      $or: [{ username: username }, { email: email }],
+    })
+    .select("+password");
+
   if (!user) {
     return res.status(401).json({
       message: "user not found",
@@ -75,7 +81,7 @@ async function loginController(req, res) {
   const token = jwt.sign(
     {
       id: user._id,
-      username: user.username
+      username: user.username,
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" },
@@ -94,19 +100,35 @@ async function loginController(req, res) {
   });
 }
 
-async function getLoginDataController(req, res) {
-  const userId = req.user.id
+async function logOutController(req, res) {
+  try {
+    res.clearCookie("token");
 
-  const user = await userModel.findById(userId)
+    return res.status(200).json({
+      message: "User logout Successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Something went wrong during logout",
+      error: error.message,
+    });
+  }
+}
+
+async function getLoginDataController(req, res) {
+  const userId = req.user.id;
+
+  const user = await userModel.findById(userId);
 
   res.status(200).json({
     message: "user login data here",
-    user
-  })
+    user,
+  });
 }
 
 module.exports = {
   registerControll,
   loginController,
-  getLoginDataController
+  logOutController,
+  getLoginDataController,
 };

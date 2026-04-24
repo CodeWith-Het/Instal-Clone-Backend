@@ -1,0 +1,26 @@
+.follow-btn {
+  margin-left: auto;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+  background-color: #0095f6; 
+  cursor: pointer;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  /* Ye class tab lagegi jab status 'pending', 'accepted', ya 'rejected' hoga */
+  &.following {
+    background-color: #363636; 
+    color: white;
+
+    &:hover {
+      background-color: #262626;
+    }
+  }
+}

@@ -1,8 +1,9 @@
-const jwt = require("jsonwebtoken")
-const postModel = require("../models/post.model")
-const likeModel = require("../models/like.model")
-const ImageKit = require("@imagekit/nodejs")
-const { toFile } = require("@imagekit/nodejs")
+const jwt = require("jsonwebtoken");
+const postModel = require("../models/post.model");
+const likeModel = require("../models/like.model");
+const followModel = require("../models/follow.model");
+const ImageKit = require("@imagekit/nodejs");
+const { toFile } = require("@imagekit/nodejs");
 
 const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
@@ -12,36 +13,34 @@ async function postCreateController(req, res) {
   try {
     console.log(req.body, req.file);
 
-  const file = await imagekit.files.upload({
-    file: await toFile(req.file.buffer, "file"),
-    fileName: "image",
-    folder: "Insta_Post_collection_3",
-  });
-
-  if (!req.file) {
-    return res.status(400).json({
-      message: "Image file is required",
+    const file = await imagekit.files.upload({
+      file: await toFile(req.file.buffer, "file"),
+      fileName: "image",
+      folder: "Insta_Post_collection_3",
     });
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Image file is required",
+      });
     }
 
-  const post = await postModel.create({
-    caption: req.body.caption,
-    imgFile: file.url,
-    user: req.user.id,
-    username:req.user.username
-  })
+    const post = await postModel.create({
+      caption: req.body.caption,
+      imgFile: file.url,
+      user: req.user.id,
+      username: req.user.username,
+    });
 
-  res.status(201).json({
-    message: "Post successfully created",
-    data: post,
-  });
-  }
-
-  catch (error) {
+    res.status(201).json({
+      message: "Post successfully created",
+      data: post,
+    });
+  } catch (error) {
     res.status(500).json({
       message: "server error",
-      error:error.message
-    })
+      error: error.message,
+    });
   }
 }
 
@@ -49,20 +48,19 @@ async function getpostController(req, res) {
   try {
     const userId = req.user.id;
 
-  const post = await postModel.find({
-    user: userId,
-  });
+    const post = await postModel.find({
+      user: userId,
+    });
 
-  res.status(200).json({
-    message: "posts fetch",
-    post,
-  });
-  }
-  catch (error) {
+    res.status(200).json({
+      message: "posts fetch",
+      post,
+    });
+  } catch (error) {
     res.status(500).json({
       message: "server error",
-      error:error.message
-    })
+      error: error.message,
+    });
   }
 }
 
@@ -119,7 +117,6 @@ async function toggleLikeController(req, res) {
     });
 
     if (isAlreadyLiked) {
-      // Agar mil gaya toh delete karo (Unlike)
       await likeModel.findByIdAndDelete(isAlreadyLiked._id);
 
       const updatedPost = await postModel.findByIdAndUpdate(
@@ -141,7 +138,6 @@ async function toggleLikeController(req, res) {
       user: userId,
     });
 
-    // like
     const updatedPost = await postModel.findByIdAndUpdate(
       postId,
       { $inc: { likeCounter: 1 } },
@@ -174,13 +170,25 @@ async function getFeedController(req, res) {
       .lean();
 
     const userLikes = await likeModel.find({ user: req.user.id });
-
     const likedPostIds = userLikes.map((like) => like.post.toString());
+
+    const myFollowings = await followModel.find({
+      follower: req.user.username,
+    });
+    const followStatusMap = {};
+
+    myFollowings.forEach((follow) => {
+      followStatusMap[follow.following] = follow.status;
+    });
 
     const feed = posts.map((post) => {
       return {
         ...post,
         isLiked: likedPostIds.includes(post._id.toString()),
+        user: {
+          ...post.user,
+          followStatus: followStatusMap[post.user.username] || "none",
+        },
       };
     });
 

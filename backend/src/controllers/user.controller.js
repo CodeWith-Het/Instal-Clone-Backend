@@ -240,13 +240,10 @@ async function rejectFollowRequestController(req, res) {
   }
 }
 
-// user.controller.js mein add kar:
-
 async function getMyPendingRequestsController(req, res) {
   try {
     const myUsername = req.user.username;
 
-    // Database mein check karo kahan 'following' main hu aur status 'pending' hai
     const pendingRequests = await followModel.find({
       following: myUsername,
       status: "pending"

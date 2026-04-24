@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth.context.jsx";
-import { login,register } from "../services/auth.api.js";
+import { login,logOutApi,register } from "../services/auth.api.js";
 
 
 export function useAuth() {
@@ -48,7 +48,26 @@ export function useAuth() {
         } finally {
           setLoading(false);
         }
-    };
+  };
+  
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      
+      const response = await logOutApi()
+      
+      // Frontend ke storage se data uda do
+      localStorage.removeItem("token");
+      localStorage.removeItem("user"); 
+
+      return response.data
+      
+    } catch (error) {
+      console.error("Logout Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
     
-    return ({user,setUser,handleLogin,handleRegister})
+    return ({user,setUser,handleLogin,handleRegister,handleLogout})
 }

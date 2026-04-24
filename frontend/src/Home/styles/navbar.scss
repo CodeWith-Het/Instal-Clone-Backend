@@ -1,0 +1,40 @@
+.top-navbar {
+  width: 100%;
+  height: 60px;
+  background-color: #000000; // Dark theme
+  border-bottom: 1px solid #262626; // Niche ek premium line
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .nav-brand {
+    a {
+      color: white;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: bold;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px; // Icon aur Button ke beech ki jagah
+
+    .nav-icon {
+      color: white;
+      font-size: 26px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #ed4956; // Hover pe pinkish-red
+      }
+    }
+  }
+}

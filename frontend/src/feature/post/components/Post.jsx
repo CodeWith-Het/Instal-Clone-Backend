@@ -17,56 +17,61 @@ const Post = ({ post }) => {
   const isOwnPost = currentUser?.username === post.user?.username;
 
   return (
-    <div className="post">
-      <div className="username-section">
-        <div className="profile-img-wrapper">
-          <img src={post.user?.profile_image} alt="profile" />
-        </div>
+    <>
+      <div className="">
 
-        <p>{post.user?.username || "Unknown User"}</p>
-
-        {/* Agar khud ki post nahi hai, tabhi FollowButton dikhega */}
-        {!isOwnPost && (
-          <FollowButton
-            username={post.user?.username}
-            isPrivateAccount={post.user?.isPrivate}
-            initialStatus={post.user?.followStatus || "none"}
-          />
-        )}
       </div>
-
-      <div className="post-image">
-        <img src={post.imgFile} alt="post content" />
-      </div>
-
-      <div className="caption-section">
-        <div className="caption-icon">
-          <div className="like-comment-share">
-            <i
-              className={post.isLiked ? "ri-heart-3-fill" : "ri-heart-3-line"}
-              onClick={onLikeClick}
-              style={{
-                color: post.isLiked ? "#ed4956" : "white",
-                cursor: "pointer",
-              }}
-            ></i>
-            <i className="ri-chat-3-line"></i>
-            <i className="ri-share-forward-line"></i>
+      <div className="post">
+        <div className="username-section">
+          <div className="profile-img-wrapper">
+            <img src={post.user?.profile_image} alt="profile" />
           </div>
 
-          <div className="save">
-            <i className="ri-save-fill"></i>
-          </div>
+          <p>{post.user?.username || "Unknown User"}</p>
+
+          {/* Agar khud ki post nahi hai, tabhi FollowButton dikhega */}
+          {!isOwnPost && (
+            <FollowButton
+              username={post.user?.username}
+              isPrivateAccount={post.user?.isPrivate}
+              initialStatus={post.user?.followStatus || "none"}
+            />
+          )}
         </div>
 
-        <p className="likes-count">{post.likeCounter} likes</p>
+        <div className="post-image">
+          <img src={post.imgFile} alt="post content" />
+        </div>
 
-        <p className="caption-text">
-          <span>{post.user?.username}</span>
-          {post.caption}
-        </p>
+        <div className="caption-section">
+          <div className="caption-icon">
+            <div className="like-comment-share">
+              <i
+                className={post.isLiked ? "ri-heart-3-fill" : "ri-heart-3-line"}
+                onClick={onLikeClick}
+                style={{
+                  color: post.isLiked ? "#ed4956" : "white",
+                  cursor: "pointer",
+                }}
+              ></i>
+              <i className="ri-chat-3-line"></i>
+              <i className="ri-share-forward-line"></i>
+            </div>
+
+            <div className="save">
+              <i className="ri-save-fill"></i>
+            </div>
+          </div>
+
+          <p className="likes-count">{post.likeCounter} likes</p>
+
+          <p className="caption-text">
+            <span>{post.user?.username}</span>
+            {post.caption}
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -45,3 +45,13 @@ export async function  getLoginData() {
         return null
     }
 }
+
+export async function logOutApi() {
+    try {
+        const response = await api.post("/logout")
+        return response.data
+    }
+    catch (error) {
+        return error.response?.data || error.message
+    }
+}

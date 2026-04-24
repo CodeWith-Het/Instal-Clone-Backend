@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useFollow } from "../hooks/useFollow"; // Path check kar lena
+import { useFollow } from './../hooks/useFollow'
+import "../styles/followButton.scss"
 
 const FollowButton = ({ username, initialStatus = "none" }) => {
   // Hook se functions nikale

@@ -64,7 +64,7 @@
     }
   }
 
-  // Toggle Login/Register section (Neeche wala p tag)
+  // Toggle Login/Register section
   p {
     color: whitesmoke;
     display: flex;
@@ -87,5 +87,42 @@
         background-color: #9b1f1fe4;
       }
     }
+  }
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: transparent;
+  color: #ed4956; 
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  margin-top: auto;
+
+  i {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  &:hover {
+    background-color: rgba(237, 73, 86, 0.1); /* Halka red background hover pe */
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }

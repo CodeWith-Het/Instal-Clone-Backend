@@ -1,91 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { useFollow } from "../hooks/useFollow";
+import { useFollow } from './../hooks/useFollow';
+import "../styles/followRequestList.scss"
 
 const FollowRequestList = () => {
-  const {
-    fetchPendingRequests,
-    handleAcceptFollowRequest,
-    handleRejectFollowRequest,
-  } = useFollow();
+  const { fetchPendingRequests, handleAcceptFollowRequest, handleRejectFollowRequest } = useFollow();
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Page load hote hi API call karo
   useEffect(() => {
     const loadRequests = async () => {
       const res = await fetchPendingRequests();
       if (res?.requests) {
         setRequests(res.requests);
       }
+      setLoading(false);
     };
     loadRequests();
   }, []);
 
-  // Accept karne ka logic
   const onAccept = async (followerUsername) => {
     await handleAcceptFollowRequest(followerUsername);
-    // UI se request hata do kyunki accept ho gayi
-    setRequests(requests.filter((req) => req.follower !== followerUsername));
+    setRequests(requests.filter(req => req.follower !== followerUsername));
   };
 
-  // Reject karne ka logic
   const onReject = async (followerUsername) => {
     await handleRejectFollowRequest(followerUsername);
-    // UI se request hata do kyunki reject ho gayi
-    setRequests(requests.filter((req) => req.follower !== followerUsername));
+    setRequests(requests.filter(req => req.follower !== followerUsername));
   };
+
+  if (loading) return <h3 style={{ color: "white", textAlign: "center" }}>Loading requests...</h3>;
 
   return (
     <div className="follow-requests-container">
-      <h2>Follow Requests</h2>
-
+      <h2 className="page-title">Follow Requests</h2>
+      
       {requests.length === 0 ? (
-        <p>No pending requests.</p>
+        <p className="no-requests">No pending requests.</p>
       ) : (
-        requests.map((req) => (
-          <div
-            key={req._id}
-            className="request-card"
-            style={{
-              display: "flex",
-              gap: "10px",
-              alignItems: "center",
-              marginBottom: "15px",
-            }}
-          >
-            <p>
-              <strong>{req.follower}</strong> wants to follow you.
-            </p>
+        <div className="requests-list">
+          {requests.map((req) => (
+            <div key={req._id} className="request-item">
+              
+              {/* Left Side: User ki detail */}
+              <div className="user-info">
+                <div className="profile-img-wrapper">
 
-            {/* ASLI JADOO YAHAN HAI */}
-            <button
-              onClick={() => onAccept(req.follower)}
-              style={{
-                backgroundColor: "#0095f6",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Accept
-            </button>
+                  {/* Agar profile pic nahi hai toh default dikha do */}
+                  <img src={`https://ui-avatars.com/api/?name=${req.follower}&background=random`} alt="profile" />
+                </div>
+                <div className="user-text">
+                  <p className="username">{req.follower}</p>
+                  <p className="sub-text">wants to follow you</p>
+                </div>
+              </div>
+              
+              {/* Right Side: Tere dono buttons */}
+              <div className="action-buttons">
+                <button className="accept-btn" onClick={() => onAccept(req.follower)}>
+                  Accept
+                </button>
+                <button className="reject-btn" onClick={() => onReject(req.follower)}>
+                  Reject
+                </button>
+              </div>
 
-            <button
-              onClick={() => onReject(req.follower)}
-              style={{
-                backgroundColor: "#363636",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Reject
-            </button>
-          </div>
-        ))
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

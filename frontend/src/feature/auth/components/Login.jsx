@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/form.scss";
+import "../styles/form.scss"
 import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
     if (res?.token) {
       navigate("/");
     }
-    // ❌ Error case
+
     else {
       alert(res?.message || "Login failed");
     }
